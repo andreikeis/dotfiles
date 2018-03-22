@@ -73,15 +73,15 @@ autocmd FileType java set colorcolumn=120
 
 
 " Colorscheme
-" set background=dark
+set background=dark
 " let g:solarized_termcolors=256
-" let g:solarized_contrast="normal"
-" let g:solarized_visibility="normal"
-" let g:solarized_termtrans=1
-" let g:solarized_bold=1
-" let g:solarized_italic=1
-" let g:solarized_underline=1
-" colorscheme solarized
+let g:solarized_contrast="normal"
+let g:solarized_visibility="normal"
+let g:solarized_termtrans=1
+let g:solarized_bold=1
+let g:solarized_italic=1
+let g:solarized_underline=1
+colorscheme solarized
 " Load nerdtree when no file is given
 " autocmd vimenter * if !argc() | NERDTree | endif
 

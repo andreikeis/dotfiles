@@ -9,7 +9,8 @@ fi
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
-#
+
+export PS1="[\u@\h \w] \$ "
 
 # Set config variables first
 GIT_PROMPT_ONLY_IN_REPO=1
