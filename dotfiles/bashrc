@@ -9,9 +9,8 @@ source ~/.git-completion.bash
 source ~/.git-prompt.sh
 
 
-# export PS1='[\u@\h \w$(__git_ps1 " (%s)")] \$ '
 export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_SHOWDIRTYSTATE=1
-export PROMPT_COMMAND='__git_ps1 "\u@\h:\w" " \\\$ "'
+export PS1='\u@\h \W$(__git_ps1 " [%s]") \$ '
 
 source ~/.aliases
