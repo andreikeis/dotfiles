@@ -1,2 +1,4 @@
 alias ls="ls --color=auto"
 alias gg="git grep"
+alias h=history
+alias pusho='git push origin `git rev-parse --abbrev-ref HEAD`'

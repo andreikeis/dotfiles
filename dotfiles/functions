@@ -1,0 +1,17 @@
+#!/bin/sh
+
+function v {
+    name=$1
+    
+    if [ "$VIRTUAL_ENV" != "" ]; then
+        deactivate
+    fi
+
+    if [ -d ~/venv/$name ]; then
+        source ~/venv/$name/bin/activate
+    else
+        virtualenv-3 ~/venv/$name
+        source ~/venv/$name/bin/activate
+        pip install -U setuptools pip
+    fi        
+}

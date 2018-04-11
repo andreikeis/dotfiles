@@ -4,3 +4,5 @@
 [user]
 	name = Andrei Keis
 	email = andreikeis@users.noreply.github.com
+[core]
+	editor = vim
