@@ -15,3 +15,6 @@ export PS1='\u@\h \w$(__git_ps1 " [%s]") \$ '
 
 source ~/.aliases
 source ~/.functions
+
+export NO_PROXY=$NO_PROXY,s3.amazonaws.com
+export no_proxy=$NO_PROXY,s3.amazonaws.com

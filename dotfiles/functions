@@ -2,7 +2,6 @@
 
 function v {
     name=$1
-    
     if [ "$VIRTUAL_ENV" != "" ]; then
         deactivate
     fi
@@ -14,4 +13,18 @@ function v {
         source ~/venv/$name/bin/activate
         pip install -U setuptools pip
     fi        
+}
+
+function v_rm {
+    name=$1
+    if [ "$VIRTUAL_ENV" != "" ]; then
+        deactivate
+    fi
+    rm -rf  ~/venv/$name
+}
+
+function v_ls {
+    for f in $(ls ~/venv); do
+        echo $(basename $f)
+    done
 }
