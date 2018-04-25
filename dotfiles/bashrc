@@ -16,5 +16,7 @@ export PS1='\u@\h \w$(__git_ps1 " [%s]") \$ '
 source ~/.aliases
 source ~/.functions
 
-export NO_PROXY=$NO_PROXY,s3.amazonaws.com
-export no_proxy=$NO_PROXY,s3.amazonaws.com
+export NO_PROXY=$NO_PROXY,s3.amazonaws.com,ec2.amazonaws.com
+export no_proxy=$NO_PROXY,s3.amazonaws.com,ec2.amazonaws.com
+
+export AWS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt
