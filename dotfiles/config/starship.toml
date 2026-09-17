@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-add_newline = true
+add_newline = false
 command_timeout = 500
 
 format = """
@@ -54,6 +54,6 @@ format = " [$duration]($style)"
 style = "yellow"
 
 [character]
-format = " $symbol"
+format = " $symbol "
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
