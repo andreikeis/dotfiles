@@ -1,0 +1,39 @@
+# .zshrc
+
+typeset -U path PATH
+
+# --- Nix ---
+# Multi-user (daemon) install, e.g. macOS default and most Linux installs:
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+# Single-user install fallback:
+elif [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# --- Completion ---
+autoload -Uz compinit && compinit -C
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# --- History ---
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_SPACE APPEND_HISTORY
+
+# --- Shared aliases / functions (also used by bash) ---
+[ -f ~/.aliases ] && source ~/.aliases
+[ -f ~/.functions ] && source ~/.functions
+
+# --- Prompt ---
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# --- Proxy / TLS (only kick in on hosts that actually have these, e.g. work/AWS boxes) ---
+[ -f /etc/pki/tls/certs/ca-bundle.crt ] && export AWS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt
+export NO_PROXY="${NO_PROXY:+$NO_PROXY,}s3.amazonaws.com,ec2.amazonaws.com"
+export no_proxy="$NO_PROXY"
