@@ -12,7 +12,6 @@ $git_status\
 $nix_shell\
 $aws\
 $cmd_duration\
-$line_break\
 $character"""
 
 [username]
@@ -55,5 +54,6 @@ format = " [$duration]($style)"
 style = "yellow"
 
 [character]
+format = " $symbol"
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
