@@ -38,12 +38,12 @@ style = "bold red"
 format = "[$all_status$ahead_behind]($style)"
 
 [nix_shell]
-symbol = " "
+symbol = " "
 format = " [$symbol$state]($style)"
 style = "bold blue"
 
 [aws]
-symbol = " "
+symbol = " "
 format = " [$symbol$profile(\\($region\\))]($style)"
 style = "bold yellow"
 disabled = false
