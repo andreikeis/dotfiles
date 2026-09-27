@@ -14,6 +14,15 @@ if [ -z "$NIX_PROFILES" ]; then
   fi
 fi
 
+# Nix must win over OS built-ins (see zshrc): move these to the front of PATH,
+# dropping any existing occurrence. Lowest priority first.
+for _d in /nix/var/nix/profiles/default/bin "$HOME/.nix-profile/bin" "$HOME/.local/bin"; do
+  _p=":$PATH:"; _p=${_p//:$_d:/:}; _p=${_p#:}; _p=${_p%:}
+  PATH="$_d${_p:+:$_p}"
+done
+unset _d _p
+export PATH
+
 source ~/.git-completion.bash
 source ~/.git-prompt.sh
 

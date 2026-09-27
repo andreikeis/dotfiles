@@ -11,7 +11,11 @@ elif [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
   . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
-export PATH="$HOME/.local/bin:$PATH"
+# Nix must win over OS built-ins. On macOS, /etc/zprofile's path_helper moves the
+# system dirs to the front, and nix-daemon.sh no-ops in child shells (inherited
+# __ETC_PROFILE_NIX_SOURCED), so /usr/bin/git etc. would shadow nix. Force the
+# order explicitly; typeset -U above drops the later duplicates.
+path=("$HOME/.local/bin" "$HOME/.nix-profile/bin" /nix/var/nix/profiles/default/bin $path)
 
 # --- Completion ---
 autoload -Uz compinit && compinit -C
