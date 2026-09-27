@@ -63,3 +63,20 @@ if [ "$(uname)" == "Darwin" ] && [ -d ~/.nix-profile/Applications ]; then
     cp -R -L "$app" "$dst" && chmod -R u+w "$dst" && echo "$src" > "$stamp"
   done
 fi
+
+# macOS: copy nix-installed Nerd Font "Mono" variants into ~/Library/Fonts.
+# Like the apps above, these must be real copies: macOS doesn't register font
+# files that are symlinks into /nix/store, so apps silently fall back (e.g.
+# Alacritty -> Menlo). Only the Mono variants are copied (what alacritty.toml
+# uses); the full JetBrainsMono set is ~100 files / 220MB. Copies are
+# refreshed when the content changes; stale symlinks from older setups are
+# replaced.
+if [ "$(uname)" == "Darwin" ] && [ -d ~/.nix-profile/share/fonts ]; then
+  mkdir -p ~/Library/Fonts
+  find -L ~/.nix-profile/share/fonts -type f -name '*NerdFontMono-*' | while read -r font; do
+    dst=~/Library/Fonts/"$(basename "$font")"
+    if [ ! -L "$dst" ] && cmp -s "$font" "$dst"; then continue; fi
+    rm -f "$dst"
+    cp -L "$font" "$dst" && chmod u+w "$dst"
+  done
+fi
