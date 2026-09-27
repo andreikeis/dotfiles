@@ -5,7 +5,7 @@
 input=$(cat)
 dir=$(printf '%s' "$input" | jq -r '.workspace.current_dir // .cwd // empty')
 model=$(printf '%s' "$input" | jq -r '.model.display_name // empty')
-branch=$(git -C "$dir" --no-optional-locks branch --show-current 2>/dev/null)
+branch=$(git -C "$dir" --no-optional-locks symbolic-ref --short -q HEAD 2>/dev/null)
 
 esc=$(printf '\033')
 badge=""
