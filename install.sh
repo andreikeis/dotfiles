@@ -33,11 +33,33 @@ if [ -d "$DIR/dotfiles/claude" ]; then
 fi
 
 # macOS: expose nix-installed .app bundles (e.g. Alacritty) in ~/Applications
-# so Spotlight/Dock see a real app. Link via the stable ~/.nix-profile path,
-# never a /nix/store path, which goes stale on the next profile upgrade + gc.
+# so Spotlight/Dock see a real app. These must be real copies, not symlinks:
+# the Dock resolves a symlink when pinning and stores the /nix/store path,
+# which breaks after the next profile upgrade + gc. The copy is refreshed
+# whenever the profile's store path for the app changes (tracked in $APPSTATE).
+# A same-named app in ~/Applications that we didn't create is left alone.
 if [ "$(uname)" == "Darwin" ] && [ -d ~/.nix-profile/Applications ]; then
-  mkdir -p ~/Applications
+  APPSTATE="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/apps"
+  mkdir -p ~/Applications "$APPSTATE"
   for app in ~/.nix-profile/Applications/*.app; do
-    ln -s -f -n "$app" ~/Applications/"$(basename "$app")"
+    name="$(basename "$app")"
+    dst=~/Applications/"$name"
+    stamp="$APPSTATE/$name"
+    src="$(readlink -f "$app")"
+
+    if [ -e "$dst" ] && [ ! -L "$dst" ] && [ ! -f "$stamp" ]; then
+      echo "install.sh: $dst exists and isn't managed here - skipping" >&2
+      continue
+    fi
+    if [ -d "$dst" ] && [ ! -L "$dst" ] && [ "$src" == "$(cat "$stamp" 2>/dev/null)" ]; then
+      continue
+    fi
+
+    # Store files are read-only; make the old copy writable before removing.
+    [ -L "$dst" ] || { [ -e "$dst" ] && chmod -R u+w "$dst"; }
+    rm -rf "$dst"
+    # -L: dereference symlinks inside the bundle so the copy has no
+    # /nix/store references of its own.
+    cp -R -L "$app" "$dst" && chmod -R u+w "$dst" && echo "$src" > "$stamp"
   done
 fi

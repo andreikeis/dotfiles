@@ -42,4 +42,6 @@ else
   nix profile install --priority 4 "$DIR" || fail "nix profile install failed"
 fi
 mkdir -p "$STATE" && echo "$want" > "$STAMP"
+# Re-run so copied .app bundles (macOS) pick up the upgraded packages.
+"$DIR/install.sh" || warn "install.sh failed after profile update"
 echo "dotsync: done"
