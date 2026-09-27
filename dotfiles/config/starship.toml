@@ -4,6 +4,7 @@ add_newline = false
 command_timeout = 500
 
 format = """
+${env_var.DEVBOX_LABEL}\
 $username\
 $hostname\
 $directory\
@@ -13,6 +14,11 @@ $nix_shell\
 $aws\
 $cmd_duration\
 $character"""
+
+# Remote badge (DEVBOX_LABEL is exported by zshrc/bashrc on remote hosts only)
+[env_var.DEVBOX_LABEL]
+format = "[ ☁ $env_value ]($style) "
+style = "bold fg:#fdf6e3 bg:#cb4b16"
 
 [username]
 style_user = "bold yellow"

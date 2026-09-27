@@ -10,6 +10,7 @@ for f in $(ls $DIR/dotfiles); do
   if [ $f == "." ]; then continue; fi
   if [ $f == ".." ]; then continue; fi
   if [ $f == "config" ]; then continue; fi
+  if [ $f == "claude" ]; then continue; fi
 
   ln -s -f -n $DIR/dotfiles/$f ~/.$f
 done
@@ -19,5 +20,14 @@ if [ -d "$DIR/dotfiles/config" ]; then
   mkdir -p ~/.config
   for f in $(ls $DIR/dotfiles/config); do
     ln -s -f -n $DIR/dotfiles/config/$f ~/.config/$f
+  done
+fi
+
+# Claude Code files -> ~/.claude/<name> (settings.json stays per-host: the
+# theme differs between home and remote on purpose)
+if [ -d "$DIR/dotfiles/claude" ]; then
+  mkdir -p ~/.claude
+  for f in $(ls $DIR/dotfiles/claude); do
+    ln -s -f -n $DIR/dotfiles/claude/$f ~/.claude/$f
   done
 fi

@@ -20,6 +20,13 @@ source ~/.git-prompt.sh
 source ~/.aliases
 source ~/.functions
 
+# --- Remote-host marker: set DEVBOX_LABEL on SSH sessions and EC2 boxes (SSM
+# sessions don't set SSH_CONNECTION). starship, tmux and the Claude Code
+# statusline all key off this to make remote sessions visually distinct.
+if [ -z "$DEVBOX_LABEL" ] && { [ -n "$SSH_CONNECTION" ] || grep -qs "Amazon EC2" /sys/devices/virtual/dmi/id/sys_vendor; }; then
+  export DEVBOX_LABEL=devbox
+fi
+
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init bash)"
 else
