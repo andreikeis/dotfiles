@@ -31,3 +31,13 @@ if [ -d "$DIR/dotfiles/claude" ]; then
     ln -s -f -n $DIR/dotfiles/claude/$f ~/.claude/$f
   done
 fi
+
+# macOS: expose nix-installed .app bundles (e.g. Alacritty) in ~/Applications
+# so Spotlight/Dock see a real app. Link via the stable ~/.nix-profile path,
+# never a /nix/store path, which goes stale on the next profile upgrade + gc.
+if [ "$(uname)" == "Darwin" ] && [ -d ~/.nix-profile/Applications ]; then
+  mkdir -p ~/Applications
+  for app in ~/.nix-profile/Applications/*.app; do
+    ln -s -f -n "$app" ~/Applications/"$(basename "$app")"
+  done
+fi
