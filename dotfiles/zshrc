@@ -49,12 +49,14 @@ fi
 export NO_PROXY="${NO_PROXY:+$NO_PROXY,}s3.amazonaws.com,ec2.amazonaws.com"
 export no_proxy="$NO_PROXY"
 
-# --- Remote hosts: land in a persistent tmux session on connect (attach to
-# "main" if it exists, else create it). Detaching (C-a d) ends the connection;
-# long-running work keeps going in tmux. Skipped inside tmux, for non-tty /
-# non-interactive shells, and for shells Claude Code spawns.
-# Set NO_AUTO_TMUX=1 to get a plain shell.
-if [[ -n $DEVBOX_LABEL && -o interactive && -t 0 && -t 1 && -z $TMUX && -z $CLAUDECODE && -z $NO_AUTO_TMUX ]] \
-   && command -v tmux >/dev/null 2>&1; then
-  tmux new -A -s main && exit
+# --- Remote hosts: on connect, sync dotfiles + nix packages (sync.sh --quick:
+# bounded, never blocks the login), then land in a persistent tmux session
+# (attach to "main" if it exists, else create it). Detaching (C-a d) ends the
+# connection; long-running work keeps going in tmux. Skipped inside tmux, for
+# non-tty / non-interactive shells, and for shells Claude Code spawns.
+# Set NO_AUTO_TMUX=1 to get a plain shell (and skip the sync).
+if [[ -n $DEVBOX_LABEL && -o interactive && -t 0 && -t 1 && -z $TMUX && -z $CLAUDECODE && -z $NO_AUTO_TMUX ]]; then
+  [[ -x ~/dotfiles/sync.sh ]] && ~/dotfiles/sync.sh --quick
+  rehash
+  command -v tmux >/dev/null 2>&1 && tmux new -A -s main && exit
 fi
