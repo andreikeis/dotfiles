@@ -36,14 +36,6 @@ if [ -z "$DEVBOX_LABEL" ] && { [ -n "$SSH_CONNECTION" ] || grep -qs "Amazon EC2"
   export DEVBOX_LABEL=devbox
 fi
 
-# --- Remote locale: SSM sessions pass no environment through, so LANG is
-# unset and tmux falls back to non-UTF-8 mode (mangled pane borders, glyphs
-# drawn as "_"). C.UTF-8 is built into glibc, so nix-built tools can use it
-# without LOCALE_ARCHIVE. A locale forwarded by SSH is left alone.
-if [ -n "$DEVBOX_LABEL" ] && [ -z "$LANG$LC_ALL$LC_CTYPE" ]; then
-  export LANG=C.UTF-8
-fi
-
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init bash)"
 else
